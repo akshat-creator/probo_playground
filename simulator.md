@@ -62,7 +62,7 @@ At this point, our environment is tracking a robot's position, as well as obstac
 
 > Coding tip: Fill in the function `robot_step()` with this functionality!
 
-But are all states legal? There are constraints to where a real robot can physically be -- it cannot be inside an obstacle, nor should it ever be outside the bounds of the environment. We need to make sure this is true in our simulator, too. To do this, the environment should possess a function that takes in a robot position (x and y) and validates that position using the environment's limits and its obstacles list. This function should return a boolean indicating whether or not the given position is valid.
+But are all states legal?There are constraints to where a real robot can physically be -- it canno t be inside an obstacle, nor should it ever be outside the bounds of the environment. We need to make sure this is true in our simulator, too. To do this, the environment should possess a function that takes in a robot position (x and y) and validates that position using the environment's limits and its obstacles list. This function should return a boolean indicating whether or not the given position is valid.
 
 > Coding tip: Fill in the function `is_valid_position()` with this functionality! 
 
@@ -168,6 +168,7 @@ Now that we've designed a few sensors, let's equip them to our robot. First, ins
 > Coding tip: If you haven't already, make a sensors property in the `__init__()` and initialize it as an empty list. Then, instantiate your sensors in that list!
 
 Next, loop through each item of the `sensors` list in `take_sensor_measurements()`. For each sensor, determine if sufficient time has passed for the sensor to resample the environment using its interval, time of last measurement, and the environment's current time. If this is the case, call the sensor's `sample()` function and save the output! Finally, outside the loop, return all samples in a table format similar to the environment class's `take_state_snapshot()` function.
+
 
 ## 4. Putting It All Together In A Main File
 

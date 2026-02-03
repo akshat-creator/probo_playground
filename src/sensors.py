@@ -10,6 +10,9 @@ Proprioceptive sensors measure the robot's relationship to its past states. This
 
 from abc import ABC, abstractmethod
 from math import pi
+import random
+
+from utils import BearingRange
 
 
 class SensorInterface(ABC):
@@ -107,15 +110,21 @@ class WheelEncoder(SensorInterface):
         """
         super().__init__(name, robot, interval)
         # TODO: save all noise constants as properties
-        self.LIN_NOISE = None  # m/s
-        self.ANG_NOISE = None  # rad/s
+        self.LIN_NOISE = lin_noise  # m/s
+        self.ANG_NOISE = ang_noise  # rad/s
 
     def sample(self):
         """
         Sample the robot's linear and angular velocity.
         """
         # TODO: fill in the function
-        pass
+        lin_vel = random.gauss(self.robot.last_lin_vel, self.LIN_NOISE)
+        ang_vel = random.gauss(self.robot.last_ang_vel, self.ANG_NOISE)
+
+        return {
+            "lin_vel": lin_vel,
+            "ang_vel": ang_vel,
+        }
 
 
 class LandmarkPinger(SensorInterface):
@@ -152,14 +161,34 @@ class LandmarkPinger(SensorInterface):
         """
         super().__init__(name, robot, interval)
         # TODO: save max range and all noise constants as properties
-        self.MAX_RANGE = None  # meters
-        self.RANGE_NOISE = None  # meters
-        self.RANGE_PROP_NOISE = None
-        self.BEARING_NOISE = None  # radians
+        self.MAX_RANGE = max_range  # meters
+        self.RANGE_NOISE = range_noise  # meters
+        self.RANGE_PROP_NOISE = range_prop_noise
+        self.BEARING_NOISE = bearing_noise  # radians
 
     def sample(self):
         """
         Reports noisy measurements of the bearing and range between the robot and all nearby landmarks.
         """
         # TODO: fill in the function
-        pass
+        measurements: list[BearingRange | None] = []
+        true_proximities = self.robot.env.get_proximity_to_landmarks()
+
+        for proximity in true_proximities:
+            if proximity.range > self.MAX_RANGE:
+                measurements.append(None)
+                continue
+
+            range_std = self.RANGE_NOISE + (self.RANGE_PROP_NOISE * proximity.range)
+            noisy_range = random.gauss(proximity.range, range_std)
+            noisy_bearing = random.gauss(proximity.bearing, self.BEARING_NOISE)
+
+            measurements.append(
+                BearingRange(
+                    landmark_id=proximity.landmark_id,
+                    bearing=noisy_bearing,
+                    range=noisy_range,
+                )
+            )
+
+        return measurements

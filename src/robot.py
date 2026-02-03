@@ -8,7 +8,7 @@ import math
 import random
 
 from environment import Environment
-from sensors import SensorInterface
+from sensors import SensorInterface, WheelEncoder, LandmarkPinger
 
 
 class Robot:
@@ -35,6 +35,8 @@ class Robot:
         self.last_ang_vel = 0.0
         self.last_x_vel = 0.0
         self.last_y_vel = 0.0
+        self.sensors.append(WheelEncoder(self))
+        self.sensors.append(LandmarkPinger(self))
 
     def robot_step_differential(self, lin_vel: float, ang_vel: float):
         """
@@ -99,6 +101,16 @@ class Robot:
         Return noisy sensor readings of the environment at this timestep, including data from all sensors, in a table format.
         """
         # TODO: fill in the function
+        def _serialize_measurement(measurement):
+            if hasattr(measurement, "to_dict"):
+                return measurement.to_dict()
+            if isinstance(measurement, list):
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in measurement
+                ]
+            return measurement
+
         measurements = []
         current_time = self.env.time
 
@@ -109,7 +121,7 @@ class Robot:
                 measurements.append(
                     {
                         "sensor": sensor.name,
-                        "measurement": sample,
+                        "measurement": _serialize_measurement(sample),
                     }
                 )
 
