@@ -27,9 +27,7 @@ class Robot:
         Args:
             env: the environment this robot is operating in
         """
-        # TODO: set the environment property to the parameter value
         self.env = env
-        # TODO: initialize the sensors property as an empty list
         self.sensors = []
         self.last_lin_vel = 0.0
         self.last_ang_vel = 0.0
@@ -51,7 +49,6 @@ class Robot:
             dy: change in y position
             d-theta: change in heading
         """
-        # TODO: fill in the function
         lin_vel_noisy = random.gauss(lin_vel, 0.05)
         ang_vel_noisy = random.gauss(ang_vel, 0.03)
 
@@ -80,7 +77,6 @@ class Robot:
             dy: change in y position
             d-theta: change in heading
         """
-        # TODO: fill in the function
         x_vel_noisy = random.gauss(x_vel, 0.05)
         y_vel_noisy = random.gauss(y_vel, 0.05)
         ang_vel_noisy = random.gauss(ang_vel, 0.03)
@@ -100,7 +96,6 @@ class Robot:
         """
         Return noisy sensor readings of the environment at this timestep, including data from all sensors, in a table format.
         """
-        # TODO: fill in the function
         def _serialize_measurement(measurement):
             if hasattr(measurement, "to_dict"):
                 return measurement.to_dict()

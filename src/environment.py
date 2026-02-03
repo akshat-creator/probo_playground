@@ -41,20 +41,15 @@ class Environment:
             landmarks: a list of landmarks
             robot_starting_pose: the initial position and heading of the robot
         """
-        # TODO: set the dimensions property to the parameter value
         self.DIMENSIONS = dimensions
 
-        # TODO: set the timestep size property to the parameter value
         self.DT = dt
 
-        # TODO: set the current time to zero
         self.time = 0.0
 
-        # TODO: set the obstacles and landmarks properties to the parameter lists
         self.OBSTACLES = obstacles
         self.LANDMARKS = landmarks
 
-        # TODO: set the robot pose property to the parameter value
         self.robot_pose = robot_starting_pose
 
     def robot_step(self, dx: float, dy: float, dtheta: float):
@@ -69,7 +64,6 @@ class Environment:
         Returns:
             Nothing, but update the robot_pose property at the end
         """
-        # TODO: fill in the function
         valid_dx, valid_dy = self.is_valid_motion(dx, dy)
         new_x = self.robot_pose.pos.x + valid_dx
         new_y = self.robot_pose.pos.y + valid_dy
@@ -90,7 +84,6 @@ class Environment:
             dx: change in x position that should be executed
             dy: change in y position that should be executed
         """
-        # TODO: fill in the function
         candidate = Position(
             self.robot_pose.pos.x + dx,
             self.robot_pose.pos.y + dy,
@@ -111,7 +104,6 @@ class Environment:
         Returns:
             true if the position is valid and false otherwise
         """
-        # TODO: fill in the function
         if not self.DIMENSIONS.within_bounds(position):
             return False
 
@@ -125,14 +117,12 @@ class Environment:
         """
         Return the true robot pose.
         """
-        # TODO: fill in the function
         return self.robot_pose
 
     def get_proximity_to_landmarks(self):
         """
         Return a list of the robot's true range and bearing to all landmarks.
         """
-        # TODO: fill in the function
         proximities: list[BearingRange] = []
         robot_x = self.robot_pose.pos.x
         robot_y = self.robot_pose.pos.y
@@ -156,7 +146,6 @@ class Environment:
         """
         Return true state information about this timestep, including time, robot position, and the robot's bearing/range to landmarks, in a table format.
         """
-        # TODO: fill in the function
         return {
             "time": self.time,
             "robot_pose": self.robot_pose.to_dict(),
@@ -170,7 +159,6 @@ class Environment:
         """
         Return static information about the environment, including dimensions, timestep size, locations and dimensions of obstacles, and locations of landmarks.
         """
-        # TODO: fill in the function
         return {
             "dimensions": self.DIMENSIONS.to_dict(),
             "dt": self.DT,
